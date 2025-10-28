@@ -1,9 +1,10 @@
 import json
-import time
 from confluent_kafka import Producer
-from typing import TypedDict
+from typing import Literal, TypedDict
 
-Message = TypedDict("Message", {"type": str, "timestamp": float})
+StartMessage = TypedDict(
+    "StartMessage", {"cmd": Literal["start"], "channel": str, "program_id": str}
+)
 
 
 class SubtitleTransmitter:
@@ -16,12 +17,13 @@ class SubtitleTransmitter:
         self.producer = Producer(self.kafka_producer_configuration)
 
     def start(self) -> None:
-        message: Message = {
-            "type": "START",
-            "timestamp": time.time(),
+        start_message: StartMessage = {
+            "cmd": "start",
+            "channel": "svt",
+            "program_id": "1234567-001A",
         }
 
-        message_bytes = json.dumps(message).encode("utf-8")
+        message_bytes = json.dumps(start_message).encode("utf-8")
 
         self.producer.produce(
             topic="subtitle_transmitter_actions",
