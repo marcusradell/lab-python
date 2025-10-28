@@ -16,11 +16,11 @@ class SubtitleTransmitter:
 
         self.producer = Producer(self.kafka_producer_configuration)
 
-    def start(self) -> None:
+    def start(self, channel: str, program_id: str) -> None:
         start_message: StartMessage = {
             "cmd": "start",
-            "channel": "svt",
-            "program_id": "1234567-001A",
+            "channel": channel,
+            "program_id": program_id,
         }
 
         message_bytes = json.dumps(start_message).encode("utf-8")

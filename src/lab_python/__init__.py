@@ -1,6 +1,9 @@
 import questionary
 from lab_python.subtitle_transmitter import SubtitleTransmitter
 
+channel = "svt"
+program_id = "1234567-001A"
+
 
 def main() -> None:
     subtitle_transmitter = SubtitleTransmitter()
@@ -12,7 +15,7 @@ def main() -> None:
     ).ask()  # returns value of selection
 
     if action == "Start":
-        return subtitle_transmitter.start()
+        return subtitle_transmitter.start(channel=channel, program_id=program_id)
     if action == "Stop":
         return subtitle_transmitter.stop()
 
