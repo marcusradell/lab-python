@@ -1,5 +1,5 @@
 import json
-from confluent_kafka import Consumer
+from confluent_kafka import Consumer, Producer
 import pyaudio
 
 
@@ -12,6 +12,13 @@ class LiveSubtitler:
                 "bootstrap.servers": "localhost:9092",
                 "client.id": "python-producer",
                 "group.id": "python-consumer-group",
+            }
+        )
+
+        self.producer = Producer(
+            {
+                "bootstrap.servers": "localhost:9092",
+                "client.id": "python-producer",
             }
         )
 
@@ -59,9 +66,15 @@ class LiveSubtitler:
             frames_per_buffer=1024,
         )
 
-        with open("temp.raw", "wb") as file:
-            audio_data = microphone_stream.read(1024)
-            file.write(audio_data)
+        while True:
+            self.producer.produce(
+                "speech_to_text",
+                value=microphone_stream.read(1024),
+                callback=lambda err, msg: print(f"err: {err} msg: {msg}"),
+            )
+
+            # Poll for delivery reports
+            self.producer.poll(0)
 
 
 live_subtitler = LiveSubtitler()
