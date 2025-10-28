@@ -46,6 +46,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "questionary" },
     { name = "types-confluent-kafka" },
+    { name = "types-pyaudio" },
 ]
 
 [package.metadata]
@@ -55,6 +56,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.12.3" },
     { name = "questionary", specifier = ">=2.1.1" },
     { name = "types-confluent-kafka", specifier = ">=1.3.6" },
+    { name = "types-pyaudio", specifier = ">=0.2.16.20250801" },
 ]
 
 [[package]]
@@ -186,6 +188,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/38/31/eb48322a20c2527c2d9ccbfcd7f4023a05f9368d58128ef569aa62f6410b/types_confluent_kafka-1.3.6.tar.gz", hash = "sha256:dfefc985df06a1912b023f0a91c0abe6179c4f79ad54e7ebc3e141c03c01b90b", size = 22977 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/43/e4/3194d0f979c6b1efd6924e4601af78541467cc6eaf635e14a3e304246043/types_confluent_kafka-1.3.6-py3-none-any.whl", hash = "sha256:f2748272d74f311411dd1b8b2c7bcfbc107270fc152815e4e786ed528f43a980", size = 35679 },
+]
+
+[[package]]
+name = "types-pyaudio"
+version = "0.2.16.20250801"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/35/cf/d3e3457dcbc6292aa8f472c15d805dcb5c07c57a5037168d52197aecac1c/types_pyaudio-0.2.16.20250801.tar.gz", hash = "sha256:c6ff1b9681f67c1f14d8d86804b99fe5b1fa79f88c5a1ec0367fccfc183e095d", size = 9729 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e0/dc/34727c5464ac7c72db569b0c9787303d13374667dc74568f46b4086a3943/types_pyaudio-0.2.16.20250801-py3-none-any.whl", hash = "sha256:1b6d293e0d511108b1d13575868e87fba6ea9056900aee4f8440e0fdc89f9f75", size = 8808 },
 ]
 
 [[package]]

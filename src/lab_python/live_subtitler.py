@@ -1,9 +1,12 @@
 import json
 from confluent_kafka import Consumer
+import pyaudio
 
 
 class LiveSubtitler:
     def __init__(self) -> None:
+        self.pyAudio = pyaudio.PyAudio()
+
         self.consumer = Consumer(
             {
                 "bootstrap.servers": "localhost:9092",
@@ -12,9 +15,9 @@ class LiveSubtitler:
             }
         )
 
+    def listen(self):
         self.consumer.subscribe(["subtitle_transmitter_actions"])
 
-    def listen(self):
         try:
             while True:
                 message = self.consumer.poll(1.0)
@@ -36,6 +39,7 @@ class LiveSubtitler:
                     print(
                         f"Consumed event -> topic: {message_topic}, channel: {message_payload['channel']}, program_id: {message_payload['program_id']}"
                     )
+                    self._start()
                 else:
                     print(
                         f"Consumed unhandled event -> topic: {message_topic}, value: {message_value.decode('utf-8')}"
@@ -45,6 +49,19 @@ class LiveSubtitler:
             pass
         finally:
             self.consumer.close()
+
+    def _start(self) -> None:
+        microphone_stream = self.pyAudio.open(
+            format=pyaudio.paInt16,
+            channels=1,
+            rate=16000,
+            input=True,
+            frames_per_buffer=1024,
+        )
+
+        with open("temp.raw", "wb") as file:
+            audio_data = microphone_stream.read(1024)
+            file.write(audio_data)
 
 
 live_subtitler = LiveSubtitler()
