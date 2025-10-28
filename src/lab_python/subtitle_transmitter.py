@@ -34,4 +34,4 @@ class SubtitleTransmitter:
         self.producer.flush()
 
     def stop(self) -> None:
-        pass
+        raise NotImplementedError
