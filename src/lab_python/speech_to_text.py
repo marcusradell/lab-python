@@ -11,7 +11,7 @@ class SpeechToText:
             {
                 "bootstrap.servers": "localhost:9092",
                 "client.id": "python-producer",
-                "group.id": "python-consumer-group",
+                "group.id": "python-consumer-group-2",
             }
         )
 
@@ -20,7 +20,7 @@ class SpeechToText:
 
         try:
             while True:
-                message = self.consumer.poll(1.0)
+                message = self.consumer.poll(0)
                 if message is None:
                     continue
                 elif message.error():
@@ -42,7 +42,8 @@ class SpeechToText:
 
                 segments, _info = self.model.transcribe(audio_np, language="sv")  # type: ignore
 
-                print(f"segments: {list(segments)}")
+                for segment in segments:
+                    print(f"{segment.text}")
 
         except KeyboardInterrupt:
             pass
