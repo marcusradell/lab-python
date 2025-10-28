@@ -1,7 +1,10 @@
 import questionary
+from lab_python.subtitle_transmitter import SubtitleTransmitter
 
 
 def main() -> None:
+    subtitle_transmitter = SubtitleTransmitter()
+
     print("Welcome to Subtitle Transmitter!")
     action: str = questionary.select(
         "Choose an action",
@@ -9,8 +12,8 @@ def main() -> None:
     ).ask()  # returns value of selection
 
     if action == "Start":
-        pass
+        return subtitle_transmitter.start()
     if action == "Stop":
-        pass
+        return subtitle_transmitter.stop()
 
     print(f"Command {action} is not supported (yet).")
