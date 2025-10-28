@@ -13,8 +13,6 @@ def liveSubtitler() -> None:
 
     consumer.subscribe(["subtitle_transmitter_actions"])
 
-    # Poll for new messages from Kafka and print them.
-
     try:
         while True:
             message = consumer.poll(1.0)
@@ -44,7 +42,6 @@ def liveSubtitler() -> None:
     except KeyboardInterrupt:
         pass
     finally:
-        # Leave group and commit final offsets
         consumer.close()
 
 
