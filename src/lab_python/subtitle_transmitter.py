@@ -9,12 +9,12 @@ StartMessage = TypedDict(
 
 class SubtitleTransmitter:
     def __init__(self) -> None:
-        self.kafka_producer_configuration = {
-            "bootstrap.servers": "localhost:9092",
-            "client.id": "python-producer",
-        }
-
-        self.producer = Producer(self.kafka_producer_configuration)
+        self.producer = Producer(
+            {
+                "bootstrap.servers": "localhost:9092",
+                "client.id": "python-producer",
+            }
+        )
 
     def start(self, channel: str, program_id: str) -> None:
         start_message: StartMessage = {
