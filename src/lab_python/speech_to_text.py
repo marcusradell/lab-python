@@ -35,6 +35,16 @@ class SpeechToText:
                         print(f"Consumed empty event from topic {message_topic}.")
                         continue
 
+                    audio_np = (
+                        np.frombuffer(message_value, dtype=np.int16).astype(np.float32)
+                        / 32768.0
+                    )
+
+                    segments, _info = self.model.transcribe(audio_np, language="sv")  # type: ignore
+
+                    for segment in segments:
+                        print(f"{segment.text}")
+
                     file.write(message_value)
 
         except KeyboardInterrupt:
