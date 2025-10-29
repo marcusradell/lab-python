@@ -69,6 +69,8 @@ class LiveSubtitler:
         while True:
             value = microphone_stream.read(100 * 1024)
 
+            print("Microphone chunk read.")
+
             self.producer.produce(
                 "speech_to_text",
                 value=value,
