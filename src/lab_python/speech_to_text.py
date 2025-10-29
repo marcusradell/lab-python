@@ -5,7 +5,7 @@ import numpy as np
 
 class SpeechToText:
     def __init__(self) -> None:
-        self.model = WhisperModel("large-v3", device="cpu", compute_type="int8")
+        self.model = WhisperModel("small", device="cpu", compute_type="int8")
 
         self.consumer = Consumer(
             {
@@ -19,41 +19,23 @@ class SpeechToText:
         self.consumer.subscribe(["speech_to_text"])
 
         try:
-            with open("temp.raw", "wb") as file:
-                while True:
-                    message = self.consumer.poll(0)
-                    if message is None:
-                        continue
-                    elif message.error():
-                        print(f"ERROR: {format(message.error())}")
-                        continue
+            while True:
+                message = self.consumer.poll(0)
+                if message is None:
+                    continue
+                elif message.error():
+                    print(f"ERROR: {format(message.error())}")
+                    continue
 
-                    message_topic = message.topic()
-                    message_value = message.value()
+                message_topic = message.topic()
+                message_value = message.value()
 
-                    if message_value is None:
-                        print(f"Consumed empty event from topic {message_topic}.")
-                        continue
-
-                    audio_np = (
-                        np.frombuffer(message_value, dtype=np.int16).astype(np.float32)
-                        / 32768.0
-                    )
-
-                    segments, _info = self.model.transcribe(audio_np, language="sv")  # type: ignore
-
-                    for segment in segments:
-                        print(f"{segment.text}")
-
-                    file.write(message_value)
-
-        except KeyboardInterrupt:
-            self.consumer.close()
-            with open("temp.raw", "rb") as file:
-                all_audio_data = file.read()
+                if message_value is None:
+                    print(f"Consumed empty event from topic {message_topic}.")
+                    continue
 
                 audio_np = (
-                    np.frombuffer(all_audio_data, dtype=np.int16).astype(np.float32)
+                    np.frombuffer(message_value, dtype=np.int16).astype(np.float32)
                     / 32768.0
                 )
 
@@ -62,6 +44,8 @@ class SpeechToText:
                 for segment in segments:
                     print(f"{segment.text}")
 
+        except KeyboardInterrupt:
+            pass
         finally:
             self.consumer.close()
 
